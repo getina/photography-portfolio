@@ -1,0 +1,110 @@
+/* ── Intro overlay ───────────────────────────────────────── */
+.intro-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  /* Subtle radial spotlight so the camera "pops" */
+  background: #0f1628;
+  opacity: 1;
+  transition: opacity 0.05s; /* near-instant — the flash covers it */
+}
+
+.intro-screen.phase-flashing {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Title ────────────────────────────────────────────────── */
+.intro-title {
+  font-family: 'Georgia', serif;
+  font-size: clamp(22px, 3.5vw, 46px);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.93);
+  letter-spacing: 0.12em;
+  margin: 0;
+  text-align: center;
+  text-transform: lowercase;
+  animation: titleFadeIn 0.9s 0.3s ease both;
+}
+
+@keyframes titleFadeIn {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Camera wrapper ──────────────────────────────────────── */
+.camera-outer {
+  animation: cameraReveal 0.7s 0.4s cubic-bezier(0.34, 1.5, 0.64, 1) both;
+}
+
+@keyframes cameraReveal {
+  from { opacity: 0; transform: scale(0.82); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Gentle float — on a separate wrapper so it doesn't interfere with recoil */
+.camera-float {
+  animation: cameraFloat 3.2s 1.2s ease-in-out infinite;
+  filter: drop-shadow(0 16px 48px rgba(0, 0, 0, 0.7))
+          drop-shadow(0  4px 12px rgba(80, 160, 220, 0.18));
+}
+
+@keyframes cameraFloat {
+  0%, 100% { transform: translateY(0px);  }
+  50%       { transform: translateY(-7px); }
+}
+
+/* ── Camera SVG & shutter click ────────────────────────── */
+.camera-svg {
+  display: block;
+  width: clamp(150px, 24vw, 220px);
+  height: auto;
+}
+
+/* Shutter recoil on the SVG element itself */
+.camera-svg.phase-clicking {
+  animation: shutterRecoil 0.14s ease-out;
+}
+
+@keyframes shutterRecoil {
+  0%   { transform: translateY(0)   rotate(0deg);   }
+  40%  { transform: translateY(7px) rotate(0.6deg); }
+  100% { transform: translateY(0)   rotate(0deg);   }
+}
+
+/* Lens flash: the radial-gradient circle over the glass */
+.lens-flash-circle {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.phase-clicking .lens-flash-circle {
+  animation: lensFlash 0.22s ease-out forwards;
+}
+
+@keyframes lensFlash {
+  0%   { opacity: 0;   }
+  35%  { opacity: 0.95; }
+  100% { opacity: 0;   }
+}
+
+/* ── Full-screen white flash ─────────────────────────────── */
+.screen-flash {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  z-index: 300;
+  pointer-events: none;
+  animation: screenFlash 0.84s ease-out forwards;
+}
+
+@keyframes screenFlash {
+  0%   { opacity: 1; }
+  18%  { opacity: 1; } /* hold peak white */
+  100% { opacity: 0; }
+}
